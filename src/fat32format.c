@@ -148,6 +148,7 @@ DWORD get_volume_id ( )
 typedef struct 
     {
     int sectors_per_cluster;        // can be zero for default or 1,2,4,8,16,32 or 64
+	int force;
     }
 format_params;
 
@@ -365,11 +366,14 @@ int format_volume ( char vol, format_params* params )
     
     VolumeId = get_volume_id( );
 
-	printf ( "Warning ALL data on drive '%c' will be lost irretrievably, are you sure\n(y/n) :", vol );
-	c=getchar();
-	if ( toupper(c) != 'Y' )
+	if (!params->force)
 	{
-		exit(1);
+		printf ( "Warning ALL data on drive '%c' will be lost irretrievably, are you sure\n(y/n) :", vol );
+		c=getchar();
+		if ( toupper(c) != 'Y' )
+		{
+			exit(1);
+		}
 	}
     
 
@@ -702,6 +706,7 @@ void usage( void )
         printf ( "Fat32Format -c32 X: - use 32 sectors per cluster \n" );
         printf ( "Fat32Format -c64 X: - use 64 sectors per cluster \n" );
         printf ( "Fat32Format -c128 X: - use 128 sectors per cluster (64K clusters) \n" );
+        printf ( "Fat32Format /F X:   - force formatting (skip the interactive prompt) \n" );
         printf ( "Version 1.07, see http://www.ridgecrop.demon.co.uk/fat32format.htm \n" );
         printf ( "This software is covered by the GPL \n" );
         printf ( "Use with care - Ridgecrop are not liable for data lost using this tool \n" );
@@ -741,6 +746,9 @@ int main(int argc, char* argv[])
 			else
 				usage();
             break;
+		case 'F':
+			p.force = TRUE;
+			break;
 		case '?':
 			usage();
 			break;
