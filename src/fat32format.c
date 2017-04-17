@@ -365,12 +365,12 @@ int format_volume ( char vol, format_params* params )
     
     VolumeId = get_volume_id( );
 
-    printf ( "Warning ALL data on drive '%c' will be lost irretrievably, are you sure\n(y/n) :", vol );
-    c=getchar();
-    if ( toupper(c) != 'Y' )
-    {
-        exit(1);
-    }
+	printf ( "Warning ALL data on drive '%c' will be lost irretrievably, are you sure\n(y/n) :", vol );
+	c=getchar();
+	if ( toupper(c) != 'Y' )
+	{
+		exit(1);
+	}
     
 
 
@@ -715,12 +715,8 @@ int main(int argc, char* argv[])
     int i=1;
 
     memset( &p, 0, sizeof(p) );
-    if ( argc < 2 )
-        {
-		usage();
-        }
 
-    while ( (strlen(argv[i])>=2) && ((argv[i][0] == '-')||(argv[i][0] == '/')) )
+    while ( i < argc && (strlen(argv[i])>=2) && ((argv[i][0] == '-')||(argv[i][0] == '/')) )
     {
         switch ( argv[i][1] )
         {
@@ -755,6 +751,11 @@ int main(int argc, char* argv[])
         }
         i++;
     }
+
+	if (i >= argc)
+	{
+		usage();
+	}
 
     cVolume = argv[i][0];
 
