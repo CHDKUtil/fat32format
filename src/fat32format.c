@@ -148,6 +148,7 @@ DWORD get_volume_id ( )
 typedef struct 
     {
     int sectors_per_cluster;        // can be zero for default or 1,2,4,8,16,32 or 64
+	char* volume_label;
     BOOL force;
     }
 format_params;
@@ -356,7 +357,7 @@ int format_volume ( char vol, format_params* params )
     
     DWORD *pFirstSectOfFat;
     
-    BYTE VolId[12] = "NO NAME    ";
+    BYTE VolLab[12] = "NO NAME    ";
 
     // Debug temp vars
     ULONGLONG FatNeeded, ClusterCount;
@@ -523,7 +524,12 @@ int format_volume ( char vol, format_params* params )
     pFAT32BootSect->bBootSig = 0x29;
     
     pFAT32BootSect->dBS_VolID = VolumeId;
-    memcpy ( pFAT32BootSect->sVolLab, VolId, 11 );
+	if ( params->volume_label )
+	{
+		memset( VolLab, 0x20, 11 );
+		strcpy_s( VolLab, 11, params->volume_label );
+	}
+    memcpy( pFAT32BootSect->sVolLab, VolLab, 11 );
     memcpy( pFAT32BootSect->sBS_FilSysType, "FAT32   ", 8 );
     ((BYTE*)pFAT32BootSect)[510] = 0x55;
     ((BYTE*)pFAT32BootSect)[511] = 0xaa;
@@ -706,7 +712,8 @@ void usage( void )
         printf ( "Fat32Format -c32 X: - use 32 sectors per cluster \n" );
         printf ( "Fat32Format -c64 X: - use 64 sectors per cluster \n" );
         printf ( "Fat32Format -c128 X: - use 128 sectors per cluster (64K clusters) \n" );
-        printf ( "Fat32Format /F X:   - force formatting (skip the interactive prompt) \n" );
+        printf ( "Fat32Format -F X:   - force formatting (skip the interactive prompt) \n" );
+        printf ( "Fat32Format -vLABEL X: - use LABEL as the volume label \n" );
         printf ( "Version 1.07, see http://www.ridgecrop.demon.co.uk/fat32format.htm \n" );
         printf ( "This software is covered by the GPL \n" );
         printf ( "Use with care - Ridgecrop are not liable for data lost using this tool \n" );
@@ -746,6 +753,12 @@ int main(int argc, char* argv[])
 			else
 				usage();
             break;
+		case 'v':
+			if ( strlen(argv[i]) >= 3 )
+				p.volume_label = &argv[i][2];
+			else
+				usage();
+			break;
 		case 'F':
 			p.force = TRUE;
 			break;
