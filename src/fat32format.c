@@ -765,6 +765,12 @@ int main(int argc, char* argv[])
 		usage();
 	}
 
+	if ( !argv[i][0] || argv[i][1] != ':' || argv[i][2] )
+	{
+		printf ( "Ignoring bad disk '%s'\n", argv[i] ); 
+		usage();
+	}
+
     cVolume = argv[i][0];
 
 #if 0
