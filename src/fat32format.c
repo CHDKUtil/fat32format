@@ -148,7 +148,7 @@ DWORD get_volume_id ( )
 typedef struct 
     {
     int sectors_per_cluster;        // can be zero for default or 1,2,4,8,16,32 or 64
-	int force;
+    BOOL force;
     }
 format_params;
 
