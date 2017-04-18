@@ -489,7 +489,7 @@ int format_volume ( char vol, format_params* params )
     pFAT32BootSect->sJmpBoot[0]=0xEB;
     pFAT32BootSect->sJmpBoot[1]=0x58; // jmp.s $+0x5a is 0xeb 0x58, not 0xeb 0x5a. Thanks Marco!
     pFAT32BootSect->sJmpBoot[2]=0x90;
-    strcpy( pFAT32BootSect->sOEMName, "MSWIN4.1" );
+    strcpy_s( pFAT32BootSect->sOEMName, 8, "MSWIN4.1" );
     pFAT32BootSect->wBytsPerSec = (WORD) BytesPerSect;
     
     if ( params->sectors_per_cluster )
