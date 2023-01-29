@@ -714,7 +714,7 @@ void usage( void )
         printf ( "Fat32Format -c128 X: - use 128 sectors per cluster (64K clusters) \n" );
         printf ( "Fat32Format -F X:   - force formatting (skip the interactive prompt) \n" );
         printf ( "Fat32Format -vLABEL X: - use LABEL as the volume label \n" );
-        printf ( "Version 1.07, see http://www.ridgecrop.demon.co.uk/fat32format.htm \n" );
+        printf ( "Version 1.07, see http://www.ridgecrop.co.uk/fat32format.htm \n" );
         printf ( "This software is covered by the GPL \n" );
         printf ( "Use with care - Ridgecrop are not liable for data lost using this tool \n" );
         exit(1);
